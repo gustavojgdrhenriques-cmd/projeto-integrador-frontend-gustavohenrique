@@ -1,6 +1,6 @@
 # Guia do código — Recanto do Picuí
 
-Este guia acompanha a versão do site dos PRs #7 e #9, já mesclados na `main`. Abra no VS Code a pasta `restaurante-recanto-do-picui` e use os números de linha indicados. Linhas vazias apenas separam assuntos; os comentários e fechamentos repetidos são explicados junto dos blocos que encerram. Os arquivos minificados do Bootstrap e os vídeos são de terceiros/binários; explico a interface deles com o projeto, não cada byte interno.
+Este guia acompanha a versão do site dos PRs #7 e #9, já mesclados na `main`. Os arquivos do site estão na raiz do repositório. Abra essa raiz no VS Code e use os números de linha indicados. Linhas vazias apenas separam assuntos; os comentários e fechamentos repetidos são explicados junto dos blocos que encerram. Os arquivos minificados do Bootstrap e os vídeos são de terceiros/binários; explico a interface deles com o projeto, não cada byte interno.
 
 ## 1. O projeto em uma imagem mental
 
@@ -10,8 +10,8 @@ flowchart LR
   H --> B[Bootstrap: grade e modal]
   H --> J[script.js: comportamento]
   J --> L[(localStorage: pedido e nota)]
-  H --> A[assets: imagens, SVG e vídeos]
-  G[GitHub Actions] --> P[GitHub Pages: publica a pasta do site]
+  H --> A[assets/images, favicon.svg e assets/videos]
+  G[GitHub Actions] --> P[GitHub Pages: publica a raiz]
 ```
 
 O navegador lê o HTML, baixa CSS/JS/imagens/vídeo, constrói o DOM e executa `script.js` depois de analisar o documento (`defer`). O JavaScript lê os pratos do próprio HTML, guarda IDs no `localStorage` e redesenha a lista do pedido. O Pages apenas hospeda os arquivos estáticos; não há servidor de pedidos, pagamento ou banco de dados remoto.
@@ -29,7 +29,7 @@ O navegador lê o HTML, baixa CSS/JS/imagens/vídeo, constrói o DOM e executa `
 | `aria-*` | Informações adicionais para tecnologias assistivas; não substituem HTML semântico. |
 | `defer` | Baixa o script sem bloquear o HTML e o executa após a análise da página, na ordem dos scripts. |
 
-## 2. `restaurante-recanto-do-picui/index.html`, linha por linha
+## 2. `index.html`, linha por linha
 
 ### Documento e arquivos carregados
 
@@ -563,7 +563,7 @@ Esse arquivo é XML vetorial. O navegador desenha formas a partir de coordenadas
 | 5 | Desenha a borda interna do prato. |
 | 6 | Fecha o SVG. |
 
-Os PNG dos pratos são fotografias e, portanto, raster: cada foto é formada por pixels. O SVG serve para um ícone geométrico simples e permanece nítido ao aumentar ou diminuir. `historia-poster.jpg` é a capa extraída do teaser. `historia-picui.mp4` e `historia-picui.webm` contêm o mesmo vídeo em dois formatos para compatibilidade. Arquivos de mídia são binários; não há “linhas de código” legíveis neles.
+Os PNG dos pratos são fotografias e, portanto, raster: cada foto é formada por pixels. Eles ficam em `assets/images/` com os nomes `carne-de-sol.png`, `vo-sinha.png` e `batata-frita.png`. O SVG `assets/favicon.svg` serve para um ícone geométrico simples e permanece nítido ao aumentar ou diminuir. `assets/images/historia-poster.jpg` é a capa extraída do teaser. `assets/videos/historia-picui.mp4` e `assets/videos/historia-picui.webm` contêm o mesmo vídeo em dois formatos para compatibilidade. Arquivos de mídia são binários; não há “linhas de código” legíveis neles.
 
 ## 7. `.github/workflows/pages.yml`, linha por linha
 
@@ -595,12 +595,12 @@ YAML é um formato de configuração em que a **indentação tem significado**. 
 | 27 | Nome da etapa de empacotamento. |
 | 28 | `upload-pages-artifact@v4` envia os arquivos estáticos como artefato. |
 | 29 | Abre os parâmetros da etapa. |
-| 30 | Envia **somente** a subpasta que contém `index.html`, CSS, JS, assets e vendor. Assim a raiz do site publicado tem a página certa. |
+| 30 | Envia a raiz do repositório, onde estão `index.html`, CSS, JS, assets e vendor. A pasta `docs/` também entra no artefato e não substitui `index.html`. |
 | 31 | Nome da etapa final. |
 | 32 | Dá o identificador `deployment`, usado na linha 21. |
 | 33 | `deploy-pages@v4` publica o artefato. |
 
-O arquivo vazio `restaurante-recanto-do-picui/.nojekyll` indica que o conteúdo deve ser tratado como site estático, sem processamento Jekyll. O workflow está no PR; ele só dispara depois de chegar à `main` e de o Pages estar configurado para GitHub Actions.
+O arquivo vazio `.nojekyll`, na raiz do repositório, indica que o conteúdo deve ser tratado como site estático, sem processamento Jekyll. A action de upload omite arquivos ocultos do artefato; com a origem em GitHub Actions o Jekyll não roda. O workflow só dispara depois de chegar à `main` e de o Pages estar configurado para GitHub Actions.
 
 ## 8. `.gitignore`, linha por linha
 

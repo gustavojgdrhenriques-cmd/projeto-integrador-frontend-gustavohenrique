@@ -27,7 +27,7 @@ jobs:
       - name: Enviar os arquivos do site
         uses: actions/upload-pages-artifact@v4
         with:
-          path: restaurante-recanto-do-picui
+          path: .
       - name: Publicar no Pages
         id: deployment
         uses: actions/deploy-pages@v4
